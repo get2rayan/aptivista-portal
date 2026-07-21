@@ -1,0 +1,122 @@
+---
+interface Step {
+  label: string;
+  desc: string;
+}
+interface Props {
+  steps: Step[];
+  title?: string;
+  eyebrow?: string;
+}
+const { steps, title, eyebrow } = Astro.props;
+---
+
+<section class="flow-section">
+  <div class="container">
+    {eyebrow && <p class="eyebrow reveal">{eyebrow}</p>}
+    {title && <h2 class="flow-title reveal">{title}</h2>}
+    <ol class="flow" role="list">
+      {steps.map((step, i) => (
+        <li class="flow-step reveal" style={`--i:${i}`}>
+          <div class="flow-node">
+            <span class="flow-num">{String(i + 1).padStart(2, "0")}</span>
+            <svg viewBox="0 0 24 24" class="flow-ring" aria-hidden="true">
+              <circle cx="12" cy="12" r="10" />
+            </svg>
+          </div>
+          <h3 class="flow-label">{step.label}</h3>
+          <p class="flow-desc">{step.desc}</p>
+          {i < steps.length - 1 && (
+            <svg class="flow-arrow" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M5 12h14M13 6l6 6-6 6" />
+            </svg>
+          )}
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .flow-section { padding-block: clamp(2.5rem, 6vw, 4.5rem); }
+  .flow-title { font-size: clamp(1.6rem, 4vw, 2.2rem); margin-top: 0.5rem; margin-bottom: 2.5rem; }
+
+  .flow {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 1.25rem;
+  }
+  @media (min-width: 768px) {
+    .flow {
+      grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+      gap: 0;
+    }
+  }
+  .flow-step {
+    position: relative;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 1.5rem 1.4rem;
+    text-align: center;
+    transition: transform 0.18s ease, border-color 0.18s ease;
+  }
+  .flow-step:hover { transform: translateY(-3px); border-color: var(--color-accent); }
+  @media (min-width: 768px) {
+    .flow-step { border-right: none; border-radius: 0; }
+    .flow-step:first-child { border-radius: var(--radius-md) 0 0 var(--radius-md); }
+    .flow-step:last-child {
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      border-right: 1px solid var(--color-border);
+    }
+  }
+  .flow-node {
+    position: relative;
+    width: 52px;
+    height: 52px;
+    margin: 0 auto 1rem;
+    display: grid;
+    place-items: center;
+  }
+  .flow-ring {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    fill: none;
+    stroke: var(--color-accent);
+    stroke-width: 1.5;
+    opacity: 0.35;
+  }
+  .flow-num {
+    position: relative;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--color-primary);
+  }
+  .flow-label { font-size: 1.05rem; margin-bottom: 0.4rem; }
+  .flow-desc { font-size: 0.9rem; color: var(--color-ink-muted); margin: 0; }
+
+  .flow-arrow {
+    display: none;
+    position: absolute;
+    right: -10px;
+    top: 36px;
+    width: 20px;
+    height: 20px;
+    stroke: var(--color-accent);
+    stroke-width: 2;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    z-index: 2;
+    background: var(--color-bg);
+    border-radius: 50%;
+  }
+  @media (min-width: 768px) {
+    .flow-arrow { display: block; }
+  }
+</style>

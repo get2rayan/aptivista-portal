@@ -1,0 +1,83 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import CtaBand from "../../components/CtaBand.astro";
+import { getCollection, render } from "astro:content";
+
+export async function getStaticPaths() {
+  const isProd = import.meta.env.PROD;
+  const jobs = (await getCollection("careers")).filter((j) =>
+    isProd ? !j.data.draft : true
+  );
+  return jobs.map((job) => ({
+    params: { slug: job.id },
+    props: { job },
+  }));
+}
+
+const { job } = Astro.props;
+const { Content } = await render(job);
+
+const typeLabel: Record<string, string> = {
+  "full-time": "Full-time",
+  contract: "Contract",
+  "part-time": "Part-time",
+};
+const levelLabel: Record<string, string> = {
+  entry: "Entry-level",
+  mid: "Mid-level",
+  senior: "Senior",
+  lead: "Lead",
+};
+---
+
+<BaseLayout
+  title={`${job.data.title} — Careers`}
+  description={job.data.summary}
+>
+  <article class="container job-detail">
+    <a href="/careers" class="back-link">← All open roles</a>
+    <p class="eyebrow reveal">{job.data.team} · {typeLabel[job.data.employmentType]}</p>
+    <h1 class="job-title reveal">{job.data.title}</h1>
+    <div class="job-meta reveal">
+      <span>📍 {job.data.location}</span>
+      <span>·</span>
+      <span>{levelLabel[job.data.experienceLevel]}</span>
+      <span>·</span>
+      <span>{typeLabel[job.data.employmentType]}</span>
+    </div>
+
+    <div class="job-body prose-aptivista reveal">
+      <Content />
+    </div>
+
+    <div class="job-apply reveal">
+      <a
+        href={job.data.applyUrl ?? "/contact"}
+        class="btn btn-primary"
+      >Apply for this role</a>
+      <p class="apply-note">Or email us at <a href="mailto:careers@aptivista.example">careers@aptivista.example</a></p>
+    </div>
+  </article>
+
+  <CtaBand
+    title="Know someone great?"
+    text="Referrals are how we build our bench. Send them our way."
+    primaryLabel="Contact us"
+    secondaryLabel="More roles"
+    secondaryHref="/careers"
+  />
+</BaseLayout>
+
+<style>
+  .job-detail { padding-block: clamp(2rem, 5vw, 3.5rem); }
+  .back-link { display: inline-block; margin-bottom: 1.5rem; font-weight: 600; color: var(--color-ink-muted); }
+  .back-link:hover { color: var(--color-accent-700); }
+  .job-title { font-size: clamp(1.8rem, 4vw, 2.6rem); margin: 0.4rem 0 1rem; }
+  .job-meta { display: flex; gap: 0.5rem; flex-wrap: wrap; color: var(--color-ink-subtle); font-size: 0.95rem; margin-bottom: 2.5rem; }
+  .job-body { margin-bottom: 2.5rem; }
+  .job-apply {
+    border-top: 1px solid var(--color-border);
+    padding-top: 2rem;
+  }
+  .apply-note { margin-top: 0.75rem; color: var(--color-ink-muted); font-size: 0.9rem; }
+</style>

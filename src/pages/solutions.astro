@@ -1,0 +1,153 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ProcessFlow from "../components/ProcessFlow.astro";
+import CtaBand from "../components/CtaBand.astro";
+import { getCollection } from "astro:content";
+
+const isProd = import.meta.env.PROD;
+const solutions = (await getCollection("solutions"))
+  .filter((s) => (isProd ? !s.data.draft : true))
+  .sort((a, b) => a.data.order - b.data.order);
+
+const icons: Record<string, string> = {
+  users: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M16 19v-1a4 4 0 0 0-8 0v1M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM2 19v-1a4 4 0 0 1 4-4M22 19v-1a4 4 0 0 0-4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  code: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="m8 6-6 6 6 6M16 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  compass: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><path d="m16 8-2 6-6 2 2-6 6-2Z" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+};
+
+const staffingSteps = [
+  { label: "Requirement", desc: "Capture stack, seniority, and must-haves." },
+  { label: "Source", desc: "Active pipeline and warm network first." },
+  { label: "Screen", desc: "Structured technical screen before your time." },
+  { label: "Shortlist", desc: "2–3 vetted candidates with rationale." },
+  { label: "Interview", desc: "Coordinated rounds, loop under a week." },
+  { label: "Onboard", desc: "Pre-start prep so day one is productive." },
+];
+---
+
+<BaseLayout
+  title="Solutions"
+  description="Staffing & augmentation, solutions engineering, and consulting — three ways Aptivista helps, designed to work together."
+>
+  <section class="page-hero">
+    <div class="container">
+      <p class="eyebrow reveal">Solutions</p>
+      <h1 class="page-title reveal">One partner for talent and delivery.</h1>
+      <p class="page-lead reveal">
+        Backfill open engineering roles, build the websites and applications
+        your business runs on, or bring in senior consulting for a critical
+        initiative. Use one service or combine them — they're designed to fit
+        together.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container solutions-list">
+      {solutions.map((s, i) => (
+        <article class={`solution-row reveal ${i % 2 === 1 ? "solution-row--reverse" : ""}`}>
+          <div class="solution-content">
+            <div class="solution-icon" aria-hidden="true" set:html={icons[s.data.icon ?? "code"]} />
+            <h2 class="solution-name">{s.data.title}</h2>
+            <p class="solution-summary">{s.data.summary}</p>
+            <ul class="outcome-list">
+              {s.data.outcomes.map((o) => (
+                <li>
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4 10-10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  {o}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div class="solution-art" aria-hidden="true">
+            <div class="art-card">
+              <span class="art-num">0{i + 1}</span>
+              <div class="art-grid">
+                <span></span><span></span><span></span>
+                <span></span><span></span><span></span>
+              </div>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <ProcessFlow
+    eyebrow="Staffing pipeline"
+    title="How we backfill a role"
+    steps={staffingSteps}
+  />
+
+  <CtaBand
+    title="Need talent or a build?"
+    text="Tell us the role you're backfilling or the project you need shipped. We'll bring a plan."
+    primaryLabel="Talk to us"
+    secondaryLabel="See industries"
+    secondaryHref="/industries"
+  />
+</BaseLayout>
+
+<style>
+  .page-hero { padding-block: clamp(2.5rem, 7vw, 4.5rem) clamp(1.5rem, 4vw, 2.5rem); }
+  .page-title { font-size: clamp(2rem, 5vw, 3rem); margin: 0.5rem 0 1rem; }
+  .page-lead { color: var(--color-ink-muted); max-width: 64ch; font-size: 1.1rem; }
+
+  .solutions-list { display: flex; flex-direction: column; gap: 3rem; }
+  .solution-row {
+    display: grid;
+    gap: 2rem;
+    align-items: center;
+  }
+  @media (min-width: 860px) {
+    .solution-row { grid-template-columns: 1.3fr 1fr; }
+    .solution-row--reverse .solution-content { order: 2; }
+  }
+  .solution-icon {
+    width: 48px; height: 48px;
+    display: grid; place-items: center;
+    background: var(--color-surface-muted);
+    border-radius: var(--radius-sm);
+    color: var(--color-accent-700);
+    margin-bottom: 1rem;
+  }
+  .solution-icon svg { width: 26px; height: 26px; }
+  .solution-name { font-size: 1.6rem; margin-bottom: 0.6rem; }
+  .solution-summary { color: var(--color-ink-muted); font-size: 1.05rem; margin-bottom: 1.25rem; }
+  .outcome-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.6rem; }
+  .outcome-list li { display: flex; gap: 0.6rem; align-items: center; color: var(--color-ink); }
+  .outcome-list svg { width: 20px; height: 20px; color: var(--color-accent); flex-shrink: 0; }
+
+  .solution-art { display: none; }
+  @media (min-width: 860px) { .solution-art { display: block; } }
+  .art-card {
+    position: relative;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-700) 100%);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+  }
+  .art-num {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 5rem;
+    color: rgba(255, 255, 255, 0.12);
+    line-height: 1;
+  }
+  .art-grid {
+    position: absolute;
+    bottom: 2rem; left: 2rem; right: 2rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+  }
+  .art-grid span {
+    height: 36px;
+    background: rgba(15, 181, 166, 0.25);
+    border-radius: 6px;
+  }
+  .art-grid span:nth-child(1), .art-grid span:nth-child(5) {
+    background: var(--color-accent);
+  }
+</style>

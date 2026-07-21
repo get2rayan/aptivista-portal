@@ -1,0 +1,177 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+
+const isProd = import.meta.env.PROD;
+const jobs = (await getCollection("careers"))
+  .filter((j) => (isProd ? !j.data.draft : true))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const teams = [...new Set(jobs.map((j) => j.data.team))];
+const locations = [...new Set(jobs.map((j) => j.data.location))];
+
+const typeLabel: Record<string, string> = {
+  "full-time": "Full-time",
+  contract: "Contract",
+  "part-time": "Part-time",
+};
+const levelLabel: Record<string, string> = {
+  entry: "Entry",
+  mid: "Mid",
+  senior: "Senior",
+  lead: "Lead",
+};
+---
+
+<BaseLayout
+  title="Careers"
+  description="Open roles at Aptivista Solutions — engineering, delivery, and talent. Build client work that ships and talent pipelines that deliver."
+>
+  <section class="page-hero">
+    <div class="container">
+      <p class="eyebrow reveal">Careers</p>
+      <h1 class="page-title reveal">Build work that ships.</h1>
+      <p class="page-lead reveal">
+        We're a team that takes talent and delivery seriously. If you care about
+        craft, honest communication, and outcomes over theater, we'd like to
+        talk.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="filters reveal" role="region" aria-label="Filter open roles">
+        <div class="filter-group">
+          <label for="filter-team">Team</label>
+          <select id="filter-team" data-filter="team">
+            <option value="">All teams</option>
+            {teams.map((t) => <option value={t}>{t}</option>)}
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="filter-loc">Location</label>
+          <select id="filter-loc" data-filter="location">
+            <option value="">All locations</option>
+            {locations.map((l) => <option value={l}>{l}</option>)}
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="filter-type">Type</label>
+          <select id="filter-type" data-filter="employmentType">
+            <option value="">All types</option>
+            <option value="full-time">Full-time</option>
+            <option value="contract">Contract</option>
+            <option value="part-time">Part-time</option>
+          </select>
+        </div>
+      </div>
+
+      <ul class="jobs-list" data-jobs>
+        {jobs.map((job) => (
+          <li
+            class="job-card reveal"
+            data-team={job.data.team}
+            data-location={job.data.location}
+            data-type={job.data.employmentType}
+          >
+            <div class="job-main">
+              <h2 class="job-title">
+                <a href={`/careers/${job.id}`}>{job.data.title}</a>
+              </h2>
+              <p class="job-summary">{job.data.summary}</p>
+              <div class="job-tags">
+                <span class="badge">{job.data.team}</span>
+                <span class="badge">{job.data.location}</span>
+                <span class="badge">{typeLabel[job.data.employmentType]}</span>
+                <span class="badge">{levelLabel[job.data.experienceLevel]}</span>
+              </div>
+            </div>
+            <a href={`/careers/${job.id}`} class="btn btn-outline job-cta">View role</a>
+          </li>
+        ))}
+      </ul>
+      <p class="jobs-empty" data-empty hidden>No roles match those filters right now.</p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-hero { padding-block: clamp(2.5rem, 7vw, 4.5rem) clamp(1.5rem, 4vw, 2.5rem); }
+  .page-title { font-size: clamp(2rem, 5vw, 3rem); margin: 0.5rem 0 1rem; }
+  .page-lead { color: var(--color-ink-muted); max-width: 64ch; font-size: 1.1rem; }
+
+  .filters {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+  }
+  .filter-group { display: flex; flex-direction: column; gap: 0.3rem; flex: 1; min-width: 140px; }
+  .filter-group label { font-size: 0.8rem; font-weight: 600; color: var(--color-ink-subtle); }
+  .filter-group select {
+    padding: 0.55rem 0.7rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface);
+    font-size: 0.95rem;
+    color: var(--color-ink);
+    font-family: inherit;
+  }
+
+  .jobs-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 1rem; }
+  .job-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    transition: border-color 0.18s ease, transform 0.18s ease;
+  }
+  .job-card:hover { border-color: var(--color-accent); transform: translateY(-2px); }
+  .job-title { font-size: 1.2rem; margin-bottom: 0.4rem; }
+  .job-title a { color: var(--color-primary); text-decoration: none; }
+  .job-title a:hover { color: var(--color-accent-700); }
+  .job-summary { color: var(--color-ink-muted); font-size: 0.95rem; margin-bottom: 0.85rem; }
+  .job-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+  .job-cta { flex-shrink: 0; }
+  @media (max-width: 600px) {
+    .job-card { flex-direction: column; align-items: stretch; }
+    .job-cta { width: 100%; }
+  }
+  .jobs-empty { color: var(--color-ink-muted); padding: 2rem 0; text-align: center; }
+</style>
+
+<script>
+  const selects = document.querySelectorAll("[data-filter]");
+  const jobs = document.querySelectorAll("[data-jobs] .job-card");
+  const empty = document.querySelector("[data-empty]");
+
+  const applyFilters = () => {
+    const vals: Record<string, string> = {};
+    selects.forEach((s) => {
+      const el = s as HTMLSelectElement;
+      vals[el.dataset.filter!] = el.value;
+    });
+    let visible = 0;
+    jobs.forEach((job) => {
+      const el = job as HTMLElement;
+      const show =
+        (!vals.team || el.dataset.team === vals.team) &&
+        (!vals.location || el.dataset.location === vals.location) &&
+        (!vals.employmentType || el.dataset.type === vals.employmentType);
+      el.style.display = show ? "" : "none";
+      if (show) visible++;
+    });
+    if (empty) empty.hidden = visible !== 0;
+  };
+
+  selects.forEach((s) => s.addEventListener("change", applyFilters));
+</script>

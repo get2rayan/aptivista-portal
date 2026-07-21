@@ -1,0 +1,91 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import CtaBand from "../components/CtaBand.astro";
+import { getCollection } from "astro:content";
+
+const isProd = import.meta.env.PROD;
+const industries = (await getCollection("industries"))
+  .filter((i) => (isProd ? !i.data.draft : true))
+  .sort((a, b) => a.data.order - b.data.order);
+---
+
+<BaseLayout
+  title="Industries"
+  description="Aptivista serves industries that demand the most from software — finance, healthcare, retail, SaaS, logistics, and manufacturing."
+>
+  <section class="page-hero">
+    <div class="container">
+      <p class="eyebrow reveal">Industries</p>
+      <h1 class="page-title reveal">Depth where software matters most.</h1>
+      <p class="page-lead reveal">
+        We bring engineers who have shipped in regulated, high-stakes
+        environments and build solutions that take those constraints seriously
+        from day one.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="industry-cards">
+        {industries.map((ind) => (
+          <article class="card industry-card reveal">
+            <div class="ind-icon" aria-hidden="true">
+              {ind.data.icon === "bank" && (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 10h18M3 10l9-6 9 6M5 10v8M19 10v8M9 10v8M15 10v8M3 20h18" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              )}
+              {ind.data.icon === "heart" && (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 20s-7-4.5-9-9.5C1.5 6 4 3 7 3c2 0 3.5 1.5 5 3 1.5-1.5 3-3 5-3 3 0 5.5 3 4 7.5-2 5-9 9.5-9 9.5Z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              )}
+              {ind.data.icon === "cart" && (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="9" cy="20" r="1.5"/><circle cx="17" cy="20" r="1.5"/><path d="M2 3h3l2 13h12l2-8H6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              )}
+              {ind.data.icon === "cloud" && (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 18a4 4 0 0 1 0-8 5 5 0 0 1 9.5-1A4 4 0 0 1 17 18H7Z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              )}
+              {ind.data.icon === "truck" && (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 4h13v12H1zM14 8h4l3 3v5h-7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg>
+              )}
+              {ind.data.icon === "factory" && (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 21V9l5 3V9l5 3V9l5 3v9H3ZM7 17h2M11 17h2M15 17h2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              )}
+            </div>
+            <h2 class="ind-name">{ind.data.name}</h2>
+            <p class="ind-summary">{ind.data.summary}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CtaBand
+    title="Don't see your industry?"
+    text="The disciplines that matter — vetting, delivery, and honest consulting — travel across verticals. Tell us what you're building."
+    primaryLabel="Talk to us"
+    secondaryLabel="See solutions"
+    secondaryHref="/solutions"
+  />
+</BaseLayout>
+
+<style>
+  .page-hero { padding-block: clamp(2.5rem, 7vw, 4.5rem) clamp(1.5rem, 4vw, 2.5rem); }
+  .page-title { font-size: clamp(2rem, 5vw, 3rem); margin: 0.5rem 0 1rem; }
+  .page-lead { color: var(--color-ink-muted); max-width: 64ch; font-size: 1.1rem; }
+
+  .industry-cards { display: grid; gap: 1.25rem; grid-template-columns: 1fr; }
+  @media (min-width: 640px) { .industry-cards { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 980px) { .industry-cards { grid-template-columns: repeat(3, 1fr); } }
+
+  .industry-card { display: flex; flex-direction: column; }
+  .ind-icon {
+    width: 48px; height: 48px;
+    display: grid; place-items: center;
+    background: var(--color-surface-muted);
+    border-radius: var(--radius-sm);
+    color: var(--color-accent-700);
+    margin-bottom: 1rem;
+  }
+  .ind-icon svg { width: 26px; height: 26px; }
+  .ind-name { font-size: 1.25rem; margin-bottom: 0.5rem; }
+  .ind-summary { color: var(--color-ink-muted); font-size: 0.95rem; }
+</style>

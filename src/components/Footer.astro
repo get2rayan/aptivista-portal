@@ -1,0 +1,107 @@
+---
+import Logo from "./Logo.astro";
+const year = new Date().getFullYear();
+
+const columns = [
+  {
+    title: "Solutions",
+    links: [
+      { href: "/solutions", label: "Staffing & Augmentation" },
+      { href: "/solutions", label: "Solutions Engineering" },
+      { href: "/solutions", label: "Consulting" },
+    ],
+  },
+  {
+    title: "Company",
+    links: [
+      { href: "/industries", label: "Industries" },
+      { href: "/careers", label: "Careers" },
+      { href: "/insights", label: "Insights" },
+    ],
+  },
+  {
+    title: "Connect",
+    links: [
+      { href: "/contact", label: "Contact" },
+      { href: "mailto:hello@aptivista.example", label: "hello@aptivista.example" },
+    ],
+  },
+];
+---
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-brand">
+      <Logo variant="light" />
+      <p class="footer-tag">
+        Talent that ships. Solutions that scale. Software staffing and solutions
+        under one roof.
+      </p>
+    </div>
+    {columns.map((col) => (
+      <div class="footer-col">
+        <h3 class="footer-title">{col.title}</h3>
+        <ul>
+          {col.links.map((l) => (
+            <li><a href={l.href}>{l.label}</a></li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </div>
+  <div class="container footer-bottom">
+    <p>&copy; {year} Aptivista Solutions. All rights reserved.</p>
+    <p class="footer-loc">Oviedo, Florida, US</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--color-primary);
+    color: #cdd5ea;
+    padding-block: clamp(2.5rem, 6vw, 4rem) 1.5rem;
+    margin-top: 4rem;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    padding-bottom: 2.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  }
+  .footer-tag {
+    margin-top: 1rem;
+    max-width: 32ch;
+    color: #aeb8d4;
+    font-size: 0.95rem;
+  }
+  .footer-title {
+    color: #fff;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 1rem;
+  }
+  .footer-col ul { list-style: none; padding: 0; margin: 0; }
+  .footer-col li { margin-bottom: 0.6rem; }
+  .footer-col a {
+    color: #cdd5ea;
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: color 0.15s ease;
+  }
+  .footer-col a:hover { color: var(--color-accent); }
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding-top: 1.5rem;
+    font-size: 0.85rem;
+    color: #8a96bb;
+  }
+  @media (min-width: 640px) {
+    .footer-grid { grid-template-columns: 1.4fr 1fr 1fr 1fr; }
+  }
+</style>

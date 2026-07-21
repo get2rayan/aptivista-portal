@@ -1,0 +1,77 @@
+---
+interface Props {
+  title?: string;
+  text?: string;
+  primaryLabel?: string;
+  primaryHref?: string;
+  secondaryLabel?: string;
+  secondaryHref?: string;
+}
+const {
+  title = "Let's staff your next project.",
+  text = "Vetted talent and shipped software under one roof. Tell us what you need to backfill or build.",
+  primaryLabel = "Talk to us",
+  primaryHref = "/contact",
+  secondaryLabel = "Explore solutions",
+  secondaryHref = "/solutions",
+} = Astro.props;
+---
+
+<section class="cta-band">
+  <div class="container cta-inner reveal">
+    <div class="cta-bg" aria-hidden="true">
+      <svg viewBox="0 0 600 400" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <radialGradient id="cta-glow" cx="80%" cy="20%" r="70%">
+            <stop offset="0%" stop-color="#0fb5a6" stop-opacity="0.35" />
+            <stop offset="100%" stop-color="#1e2a5e" stop-opacity="0" />
+          </radialGradient>
+        </defs>
+        <rect width="600" height="400" fill="url(#cta-glow)" />
+        <g stroke="#0fb5a6" stroke-opacity="0.18" fill="none">
+          <path d="M0 320 Q150 260 300 300 T600 280" />
+          <path d="M0 360 Q150 300 300 340 T600 320" />
+        </g>
+      </svg>
+    </div>
+    <h2 class="cta-title">{title}</h2>
+    <p class="cta-text">{text}</p>
+    <div class="cta-actions">
+      <a href={primaryHref} class="btn btn-accent">{primaryLabel}</a>
+      <a href={secondaryHref} class="btn btn-outline cta-outline">{secondaryLabel}</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta-band {
+    padding-block: clamp(2.5rem, 6vw, 4.5rem);
+  }
+  .cta-inner {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-700) 100%);
+    border-radius: var(--radius-lg);
+    padding: clamp(2.2rem, 6vw, 3.5rem);
+    text-align: center;
+    color: #fff;
+  }
+  .cta-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  .cta-bg svg { width: 100%; height: 100%; display: block; }
+  .cta-inner > *:not(.cta-bg) { position: relative; z-index: 1; }
+  .cta-title { color: #fff; font-size: clamp(1.6rem, 4vw, 2.4rem); margin-bottom: 0.75rem; }
+  .cta-text { color: #cdd5ea; max-width: 52ch; margin: 0 auto 1.75rem; font-size: 1.05rem; }
+  .cta-actions { display: flex; gap: 0.85rem; justify-content: center; flex-wrap: wrap; }
+  .cta-outline {
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+  .cta-outline:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: #fff;
+  }
+</style>
