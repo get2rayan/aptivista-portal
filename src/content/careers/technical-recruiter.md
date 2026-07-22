@@ -7,7 +7,7 @@ employmentType: "full-time"
 experienceLevel: "mid"
 summary: "Source, screen, and place engineering talent for our clients — owning the pipeline from requirement to onboarding."
 pubDate: 2026-07-10
-applyUrl: "mailto:careers@aptivista.example?subject=Technical%20Recruiter"
+applyUrl: "mailto:info@aptivista.com?subject=Technical%20Recruiter"
 draft: false
 ---
 

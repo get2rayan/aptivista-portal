@@ -7,7 +7,7 @@ employmentType: "contract"
 experienceLevel: "lead"
 summary: "Lead architecture and delivery decisions for high-stakes client engagements — embedded, hands-on, and senior."
 pubDate: 2026-07-08
-applyUrl: "mailto:careers@aptivista.example?subject=Solutions%20Architect"
+applyUrl: "mailto:info@aptivista.com?subject=Solutions%20Architect"
 draft: false
 ---
 

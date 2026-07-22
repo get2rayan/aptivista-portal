@@ -7,7 +7,7 @@ employmentType: "full-time"
 experienceLevel: "senior"
 summary: "Build client web applications end to end with modern TypeScript, Node, and Astro — owning features from discovery to delivery."
 pubDate: 2026-07-14
-applyUrl: "mailto:careers@aptivista.example?subject=Senior%20Full-Stack%20Engineer"
+applyUrl: "mailto:info@aptivista.com?subject=Senior%20Full-Stack%20Engineer"
 draft: false
 ---
 

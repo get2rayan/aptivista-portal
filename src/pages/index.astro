@@ -32,8 +32,8 @@ const engagementSteps = [
 ];
 
 const stats = [
-  { value: "48h", label: "Avg. time to first shortlist" },
-  { value: "100%", label: "Reference-checked placements" },
+  { value: "100+", label: "Consultants placed" },
+  { value: "<2 days", label: "Avg. time to shortlist" },
   { value: "6", label: "Industries served" },
   { value: "3", label: "Services under one roof" },
 ];
@@ -208,7 +208,9 @@ const stats = [
       <div class="cards-3">
         {posts.map((post) => (
           <a href={`/insights/${post.id}`} class="card article-card reveal">
+            <div class="post-meta">
             <span class="badge">{post.data.category}</span>
+            </div>
             <h3 class="card-title">{post.data.title}</h3>
             <p class="card-text">{post.data.description}</p>
             <div class="article-meta">
@@ -327,6 +329,7 @@ const stats = [
   .card-text { color: var(--color-ink-muted); font-size: 0.95rem; flex: 1; }
   .card-link { color: var(--color-accent-700); font-weight: 600; font-size: 0.9rem; margin-top: 1rem; }
   .article-meta { display: flex; gap: 0.4rem; align-items: center; font-size: 0.8rem; color: var(--color-ink-subtle); margin-top: 1rem; }
+  .post-meta { display: flex; gap: 0.5rem; align-items: center; font-size: 0.8rem; color: var(--color-ink-subtle); margin-bottom: 0.75rem; }
 
   /* Industries */
   .industry-grid { display: grid; grid-template-columns: 1fr; gap: 0.75rem; }
