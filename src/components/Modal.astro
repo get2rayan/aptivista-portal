@@ -1,0 +1,118 @@
+---
+export interface Props {
+  /** Unique ID for this modal instance */
+  id?: string;
+  /** URL to redirect to on dismiss (default: "/") */
+  redirectTo?: string;
+}
+
+const { id, redirectTo = "/" } = Astro.props;
+---
+
+<dialog id={id} class="modal" data-redirect-to={redirectTo} data-modal>
+  <div class="modal-content">
+    <slot />
+  </div>
+</dialog>
+
+<script>
+    const dialog = document.querySelector("[data-modal]")! as HTMLDialogElement;
+        // Close on backdrop click
+        dialog.addEventListener("click", (e) => {
+            if (e.target === dialog) dialog.close();
+        });
+        // Close on [data-modal-close] button inside the slot
+        dialog.addEventListener("click", (e) => {
+            const target = e.target as HTMLElement;
+            if (target.closest("[data-modal-close]")) dismiss();
+        });
+        // Redirect on close (Esc key or programmatic close)
+        dialog.addEventListener("close", () => {
+            window.location.href = dialog.getAttribute("data-redirect-to") || "/";
+        });
+
+      function dismiss() {
+        dialog.close();
+      }
+
+//   class Modal {
+//     private dialog: HTMLDialogElement;
+//     private redirectTo: string;
+
+//     constructor(element: HTMLDialogElement) {
+//       this.dialog = element;
+//       this.redirectTo = element.getAttribute("data-redirect-to") || "/";
+
+//       // Close on backdrop click
+//       this.dialog.addEventListener("click", (e) => {
+//         if (e.target === this.dialog) this.dismiss();
+//       });
+
+//       // Close on [data-modal-close] button inside the slot
+//       this.dialog.addEventListener("click", (e) => {
+//         const target = e.target as HTMLElement;
+//         if (target.closest("[data-modal-close]")) this.dismiss();
+//       });
+
+//       // Redirect on close (Esc key or programmatic close)
+//       this.dialog.addEventListener("close", () => {
+//         window.location.href = this.redirectTo;
+//       });
+//     }
+
+//     show() {
+//       this.dialog.showModal();
+//     }
+
+//     private dismiss() {
+//       this.dialog.close();
+//     }
+//   }
+
+//   const dialogs = document.querySelectorAll("[data-modal]") as NodeListOf<HTMLDialogElement>;
+//   if (dialogs) {
+//     dialogs.forEach((dialog) => {
+//       const modal = new Modal(dialog);
+//       (window as any).__modals = (window as any).__modals || {};
+//       (window as any).__modals[dialog.id] = modal;
+//     });
+//   }
+</script>
+
+<style>
+  .modal {
+    border: none;
+    border-radius: var(--radius-lg, 12px);
+    padding: 0;
+    max-width: 420px;
+    width: 90%;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    /* Ensure centering — Tailwind's reset may strip dialog defaults */
+    margin: auto;
+  }
+  .modal::backdrop {
+    background: rgba(0, 0, 0, 0.5);
+    animation: fade-in 0.2s ease;
+  }
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  .modal[open] {
+    animation: modal-in 0.3s ease;
+  }
+  @keyframes modal-in {
+    from {
+      transform: scale(0.9);
+      opacity: 0;
+    }
+    to {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  .modal-content {
+    padding: 2.5rem 2rem;
+    text-align: center;
+  }
+</style>

@@ -7,7 +7,7 @@ const jobs = (await getCollection("careers"))
   .filter((j) => (isProd ? !j.data.draft : true))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
-const teams = [...new Set(jobs.map((j) => j.data.team))];
+//const teams = [...new Set(jobs.map((j) => j.data.team))];
 const locations = [...new Set(jobs.map((j) => j.data.location))];
 
 const typeLabel: Record<string, string> = {
@@ -42,13 +42,13 @@ const levelLabel: Record<string, string> = {
   <section class="section">
     <div class="container">
       <div class="filters reveal" role="region" aria-label="Filter open roles">
-        <div class="filter-group">
+        <!-- <div class="filter-group">
           <label for="filter-team">Team</label>
           <select id="filter-team" data-filter="team">
             <option value="">All teams</option>
             {teams.map((t) => <option value={t}>{t}</option>)}
           </select>
-        </div>
+        </div> -->
         <div class="filter-group">
           <label for="filter-loc">Location</label>
           <select id="filter-loc" data-filter="location">
@@ -150,21 +150,20 @@ const levelLabel: Record<string, string> = {
 </style>
 
 <script>
-  const selects = document.querySelectorAll("[data-filter]");
-  const jobs = document.querySelectorAll("[data-jobs] .job-card");
-  const empty = document.querySelector("[data-empty]");
+  const selects = document.querySelectorAll<HTMLSelectElement>("[data-filter]");
+  const jobs = document.querySelectorAll<HTMLLIElement>("[data-jobs] .job-card");
+  const empty = document.querySelector<HTMLParagraphElement>("[data-empty]");
 
   const applyFilters = () => {
     const vals: Record<string, string> = {};
-    selects.forEach((s) => {
-      const el = s as HTMLSelectElement;
-      vals[el.dataset.filter!] = el.value;
+    selects.forEach((el) => {
+      vals[el.dataset.filter as string] = el.value;
     });
     let visible = 0;
     jobs.forEach((job) => {
       const el = job as HTMLElement;
       const show =
-        (!vals.team || el.dataset.team === vals.team) &&
+        // (!vals.team || el.dataset.team === vals.team) &&
         (!vals.location || el.dataset.location === vals.location) &&
         (!vals.employmentType || el.dataset.type === vals.employmentType);
       el.style.display = show ? "" : "none";
