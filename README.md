@@ -1,43 +1,46 @@
-# Astro Starter Kit: Minimal
+# Aptivista
 
-```sh
-npm create astro@latest -- --template minimal
-```
+A modern Astro-based marketing website for Aptivista, built with reusable components, content collections, and static pages for solutions, industries, careers, insights, and contact.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
+## Project structure
 
 ```text
 /
-├── public/
+├── public/                  # Static assets and public files
+├── scripts/
+│   └── relativize.mjs       # Post-build script for asset path normalization
 ├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+│   ├── components/          # Reusable Astro components such as header, footer, CTA, and modal
+│   ├── content/             # Content collections for careers, industries, insights, solutions, and testimonials
+│   ├── layouts/             # Shared page layouts
+│   ├── pages/               # Route-based pages and dynamic content pages
+│   ├── styles/              # Global stylesheet
+│   ├── content.config.ts    # Content collection schema and configuration
+│   └── ...
+├── astro.config.mjs         # Astro configuration
+├── package.json             # Scripts and dependencies
+└── tsconfig.json            # TypeScript configuration
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## Development
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+Run the following commands from the project root:
 
-Any static assets, like images, can be placed in the `public/` directory.
+```sh
+npm install
+npm run dev
+```
 
-## 🧞 Commands
+## Build
 
-All commands are run from the root of the project, from a terminal:
+```sh
+npm run build
+```
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+This runs the Astro production build and then executes the post-build script in [scripts/relativize.mjs](scripts/relativize.mjs).
 
-## 👀 Want to learn more?
+## Preview
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+```sh
+npm run preview
+```
