@@ -4,7 +4,7 @@ import Logo from "./Logo.astro";
 const navLinks = [
   { href: "/solutions", label: "Solutions" },
   { href: "/industries", label: "Industries" },
-  { href: "/careers", label: "Careers" },
+  // { href: "/careers", label: "Careers" },
   { href: "/insights", label: "Insights" },
   { href: "/contact", label: "Contact" },
 ];
@@ -146,9 +146,9 @@ const isActive = (href: string) =>
 </style>
 
 <script>
-  const toggle = document.querySelector("[data-nav-toggle]");
-  const menu = document.querySelector("[data-mobile-menu]");
-  const header = document.querySelector("[data-header]");
+  const toggle = document.querySelector<HTMLButtonElement>("[data-nav-toggle]");
+  const menu = document.querySelector<HTMLElement>("[data-mobile-menu]");
+  const header = document.querySelector<HTMLElement>("[data-header]");
 
   toggle?.addEventListener("click", () => {
     const open = toggle.getAttribute("aria-expanded") === "true";
